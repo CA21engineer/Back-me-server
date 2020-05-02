@@ -1,10 +1,8 @@
 package controllers
 
 import (
-	"ca-zoooom/entity"
 	"ca-zoooom/interfaces/db"
 	"ca-zoooom/usecase"
-	"strconv"
 )
 
 type TagController struct {

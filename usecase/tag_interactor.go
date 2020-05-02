@@ -4,12 +4,12 @@ import (
 	"ca-zoooom/entity"
 )
 
-type tagInteractor struct {
-	tagRepository tagRepository
+type TagInteractor struct {
+	TagRepository TagRepository
 	StatusCode      int
 }
 
-func (interactor *tagInteractor) ListTags() (v entity.Tags, err error) {
+func (interactor *TagInteractor) ListTags() (v entity.Tags, err error) {
 	v, err = interactor.TagRepository.Get()
 	interactor.StatusCode = 200
 	return

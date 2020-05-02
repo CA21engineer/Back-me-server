@@ -5,6 +5,7 @@ import (
 	"ca-zoooom/interfaces/db"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"gopkg.in/gorp.v1"
 	"log"
 	"os"
 )
