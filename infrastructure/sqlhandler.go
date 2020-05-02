@@ -5,7 +5,6 @@ import (
 	"ca-zoooom/interfaces/db"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-	"gopkg.in/gorp.v1"
 	"log"
 	"os"
 )
@@ -24,6 +23,7 @@ func NewSqlHandler() db.SqlHandler {
 	dbmap := &gorp.DbMap{Db: database, Dialect: gorp.MySQLDialect{Engine: "InnoDB", Encoding: "UTF8"}}
 
 	dbmap.AddTableWithName(entity.Video{}, "videos").SetKeys(true, "Id")
+	dbmap.AddTableWithName(entity.Tag{}, "tags").SetKeys(true, "Id")
 	err = dbmap.CreateTablesIfNotExists()
 	checkErr(err, "Create tables failed")
 

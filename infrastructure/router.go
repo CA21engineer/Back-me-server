@@ -18,5 +18,9 @@ func init() {
 	r.PUT("/videos/:id", func(c *gin.Context) { videoController.Update(c) })
 	r.DELETE("/videos/:id", func(c *gin.Context) { videoController.Destroy(c) })
 
+	//Tag
+    tagController := controllers.NewTagController(NewSqlHandler())
+    r.GET("/tags", func(c *gin.Context) { tagController.Index(c) })
+
 	Router = r
 }
