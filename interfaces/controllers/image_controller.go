@@ -50,25 +50,3 @@ func (controller *ImageController) Create(c Context) {
 	}
 	c.JSON(controller.Interactor.StatusCode, image)
 }
-
-func (controller *ImageController) Update(c Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	v := &entity.Image{}
-	c.Bind(&v)
-	image, err := controller.Interactor.Update(v, id)
-	if err != nil {
-		c.JSON(controller.Interactor.StatusCode, NewError(err))
-		return
-	}
-	c.JSON(controller.Interactor.StatusCode, image)
-}
-
-func (controller *ImageController) Destroy(c Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	err := controller.Interactor.Delete(id)
-	if err != nil {
-		c.JSON(controller.Interactor.StatusCode, NewError(err))
-		return
-	}
-	c.JSON(controller.Interactor.StatusCode, nil)
-}

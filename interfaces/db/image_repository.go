@@ -9,6 +9,7 @@ type ImageRepository struct {
 }
 
 func (repo *ImageRepository) Get() (images entity.Images, err error) {
+	// タグとかフィルタする系のクエリパラメータ
 	_, err = repo.Select(&images, "select * from images order by id")
 	if err != nil {
 		return
@@ -30,21 +31,4 @@ func (repo *ImageRepository) Insert(v *entity.Image) (err error) {
 		return
 	}
 	return
-}
-
-func (repo *ImageRepository) Update(v *entity.Image) (id int64, err error) {
-	id, err = repo.SqlHandler.Update(v)
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-func (repo *ImageRepository) Delete(v *entity.Image) error {
-	_, err := repo.SqlHandler.Delete(v)
-	if err != nil {
-		return err
-	}
-	return err
 }
