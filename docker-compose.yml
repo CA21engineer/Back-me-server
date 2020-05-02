@@ -1,0 +1,35 @@
+version: '3.5'
+
+services:
+  db:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: smartcat
+      MYSQL_PASSWORD: mysecretpassword1234
+      MYSQL_DATABASE: ca-zoooom_development
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      target: build
+    environment:
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 3306
+      DATABASE_NAME: ca-zoooom_development
+      DATABASE_USER: smartcat
+      DATABASE_PASSWORD: mysecretpassword1234
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+    command: refresh run
+    ports:
+      - 8084:8084
+
+volumes:
+  mysql_data:
