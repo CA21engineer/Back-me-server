@@ -17,5 +17,9 @@ func init() {
 	r.GET("/images/:id", func(c *gin.Context) { imageController.Show(c) })
 	r.POST("/images", func(c *gin.Context) { imageController.Create(c) })
 
+	//Tag
+	tagController := controllers.NewTagController(NewSqlHandler())
+	r.GET("/tags", func(c *gin.Context) { tagController.Index(c) })
+
 	Router = r
 }
