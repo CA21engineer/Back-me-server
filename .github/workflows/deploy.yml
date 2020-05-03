@@ -10,8 +10,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code, Overwrite env variables for deploy
+      - name: Checkout code
         uses: actions/checkout@v1
+      - name: Overwrite env variables for deploy
         env:
           CLOUDSQL_CONNECTION_NAME: ${{ secrets.CLOUDSQL_CONNECTION_NAME }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
