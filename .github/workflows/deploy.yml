@@ -30,4 +30,4 @@ jobs:
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
       - name: Deploy
         run: |
-          gcloud app deploy app.yaml --project ca-back-me-api
+          gcloud --quiet app deploy app.yaml --project ca-back-me-api
