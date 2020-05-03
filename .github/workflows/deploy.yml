@@ -1,0 +1,32 @@
+name: DEPLOY_GAE
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code, Overwrite env variables for deploy
+        uses: actions/checkout@v1
+        env:
+          CLOUDSQL_CONNECTION_NAME: ${{ secrets.CLOUDSQL_CONNECTION_NAME }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        run: |
+          echo "  CLOUDSQL_CONNECTION_NAME: ${CLOUDSQL_CONNECTION_NAME}" >> app.yaml
+          echo "  DATABASE_NAME: ${DATABASE_NAME}" >> app.yaml
+          echo "  DATABASE_USER: ${DATABASE_USER}" >> app.yaml
+          echo "  DATABASE_PASSWORD: ${DATABASE_PASSWORD}" >> app.yaml
+      - name: Auth gcloud
+        uses: actions/gcloud/auth@master
+        env:
+          GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+      - name: Deploy
+        uses: actions/gcloud/cli@master
+        with:
+          args: "app deploy --quiet --project=ca-back-me-api"
