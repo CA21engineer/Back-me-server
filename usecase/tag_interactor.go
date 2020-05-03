@@ -6,7 +6,7 @@ import (
 
 type TagInteractor struct {
 	TagRepository TagRepository
-	StatusCode      int
+	StatusCode    int
 }
 
 func (interactor *TagInteractor) ListTags() (v entity.Tags, err error) {

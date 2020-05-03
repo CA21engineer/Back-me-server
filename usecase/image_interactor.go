@@ -34,4 +34,3 @@ func (interactor *ImageInteractor) Add(v *entity.Image) (image entity.Image, err
 	interactor.StatusCode = 201
 	return
 }
-

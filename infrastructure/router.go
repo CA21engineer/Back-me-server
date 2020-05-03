@@ -18,8 +18,8 @@ func init() {
 	r.POST("/images", func(c *gin.Context) { imageController.Create(c) })
 
 	//Tag
-    tagController := controllers.NewTagController(NewSqlHandler())
-    r.GET("/tags", func(c *gin.Context) { tagController.Index(c) })
+	tagController := controllers.NewTagController(NewSqlHandler())
+	r.GET("/tags", func(c *gin.Context) { tagController.Index(c) })
 
 	Router = r
 }
