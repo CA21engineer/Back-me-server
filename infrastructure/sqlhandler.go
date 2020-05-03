@@ -25,6 +25,7 @@ func NewSqlHandler() db.SqlHandler {
 
 	dbmap.AddTableWithName(entity.Video{}, "videos").SetKeys(true, "Id")
 	dbmap.AddTableWithName(entity.Tag{}, "tags").SetKeys(true, "Id")
+	dbmap.AddTableWithName(entity.Image{}, "images").SetKeys(true, "Id")
 	err = dbmap.CreateTablesIfNotExists()
 	checkErr(err, "Create tables failed")
 

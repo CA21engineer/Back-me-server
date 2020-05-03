@@ -10,13 +10,12 @@ var Router *gin.Engine
 func init() {
 	r := gin.Default()
 
-	// Video
-	videoController := controllers.NewVideoController(NewSqlHandler())
-	r.GET("/videos", func(c *gin.Context) { videoController.Index(c) })
-	r.GET("/videos/:id", func(c *gin.Context) { videoController.Show(c) })
-	r.POST("/videos", func(c *gin.Context) { videoController.Create(c) })
-	r.PUT("/videos/:id", func(c *gin.Context) { videoController.Update(c) })
-	r.DELETE("/videos/:id", func(c *gin.Context) { videoController.Destroy(c) })
+	// Image
+	imageController := controllers.NewImageController(NewSqlHandler())
+	// ToDo クエリで検索する
+	r.GET("/images", func(c *gin.Context) { imageController.Index(c) })
+	r.GET("/images/:id", func(c *gin.Context) { imageController.Show(c) })
+	r.POST("/images", func(c *gin.Context) { imageController.Create(c) })
 
 	//Tag
     tagController := controllers.NewTagController(NewSqlHandler())
