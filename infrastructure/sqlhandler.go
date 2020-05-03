@@ -23,7 +23,6 @@ func NewSqlHandler() db.SqlHandler {
 	checkErr(err, "sql.Open failed")
 	dbmap := &gorp.DbMap{Db: database, Dialect: gorp.MySQLDialect{Engine: "InnoDB", Encoding: "UTF8"}}
 
-	dbmap.AddTableWithName(entity.Video{}, "videos").SetKeys(true, "Id")
 	dbmap.AddTableWithName(entity.Tag{}, "tags").SetKeys(true, "Id")
 	dbmap.AddTableWithName(entity.Image{}, "images").SetKeys(true, "Id")
 	err = dbmap.CreateTablesIfNotExists()
