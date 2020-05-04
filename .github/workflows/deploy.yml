@@ -18,11 +18,19 @@ jobs:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          REGION: ${{ secrets.S3_REGION }}
+          BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
         run: |
           echo "  CLOUDSQL_CONNECTION_NAME: ${CLOUDSQL_CONNECTION_NAME}" >> app.yaml
           echo "  DATABASE_NAME: ${DATABASE_NAME}" >> app.yaml
           echo "  DATABASE_USER: ${DATABASE_USER}" >> app.yaml
           echo "  DATABASE_PASSWORD: ${DATABASE_PASSWORD}" >> app.yaml
+          echo "  ACCESS_KEY_ID: ${ACCESS_KEY_ID}" >> app.yaml
+          echo "  SECRET_ACCESS_KEY: ${SECRET_ACCESS_KEY}" >> app.yaml
+          echo "  REGION: ${REGION}" >> app.yaml
+          echo "  BUCKET_NAME: ${BUCKET_NAME}" >> app.yaml
       - name: Auth gcloud
         uses: GoogleCloudPlatform/github-actions@0.1.2
         with:
