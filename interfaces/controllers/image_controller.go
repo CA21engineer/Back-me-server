@@ -12,10 +12,10 @@ type ImageController struct {
 	Interactor usecase.ImageInteractor
 }
 
-type Pagenation struct {
-	CurrentPageNum int
-	ContentCount   int
-	TotalPage      int
+type Pagination struct {
+	CurrentPageNum int `json:"current_page_num"`
+	ContentCount   int `json:"content_count"`
+	TotalPage      int `json:"total_pages"`
 }
 
 func NewImageController(sqlHandler db.SqlHandler) *ImageController {
@@ -43,7 +43,7 @@ func (controller *ImageController) Index(c Context) {
 	// 全部のページ数。Goの言語仕様上、小数点切り上げを行うためにfloatで計算する必要がある
 	totalPageCount := math.Ceil(float64(total) / float64(limit))
 
-	c.JSON(controller.Interactor.StatusCode, H{"images": images, "paginate": Pagenation{pageNumber, limit, int(totalPageCount)}})
+	c.JSON(controller.Interactor.StatusCode, H{"images": images, "pagination": Pagination{pageNumber, limit, int(totalPageCount)}})
 }
 
 func (controller *ImageController) Show(c Context) {

@@ -10,13 +10,13 @@ type ImageRepository struct {
 }
 
 func (repo *ImageRepository) Count() (count int, err error) {
-	c, err := repo.SelectInt("select count(*) from images")
+	c, err := repo.SelectInt("select count(*) from images where is_private=false")
 	count = int(c)
 	return
 }
 
 func (repo *ImageRepository) Get(limit int, offset int) (images entity.Images, err error) {
-	_, err = repo.Select(&images, "select * from images order by id desc limit ? offset ?", limit, offset)
+	_, err = repo.Select(&images, "select * from images where is_private=false order by id desc limit ? offset ?", limit, offset)
 	if err != nil {
 		// Logging
 		return
