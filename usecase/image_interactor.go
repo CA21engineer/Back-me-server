@@ -60,8 +60,9 @@ func (interactor *ImageInteractor) GetSignedUrl(rowImgName string) (url string, 
 	//ファイル名作成
 	fileKey = time.Now().Format("2006-01-02T15:04:05Z07:00") + rowImgName
 
+	//s3へのアップロード処理
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("ap-northeast-1"),
+		Region: aws.String(os.Getenv("REGION")),
 		Credentials: credentials.NewStaticCredentialsFromCreds(credentials.Value{
 				AccessKeyID:     os.Getenv("ACCESS_KEY_ID"),
 				SecretAccessKey: os.Getenv("SECRET_ACCESS_KEY"),
@@ -71,7 +72,7 @@ func (interactor *ImageInteractor) GetSignedUrl(rowImgName string) (url string, 
 
 	svc := s3.New(sess)
 	req, _ := svc.PutObjectRequest(&s3.PutObjectInput{
-		Bucket: aws.String("ca-home-hackathon"),
+		Bucket: aws.String(os.Getenv("BUCKET_NAME")),
 		Key:    aws.String(fileKey),
 	})
 	url, err = req.Presign(15 * time.Minute)
