@@ -9,14 +9,9 @@ type ImageInteractor struct {
 	StatusCode      int
 }
 
-func (interactor *ImageInteractor) ListImages() (v entity.Images, err error) {
-	v, err = interactor.ImageRepository.Get()
-	interactor.StatusCode = 200
-	return
-}
-
-func (interactor *ImageInteractor) GetByID(id int) (v entity.Image, err error) {
-	v, err = interactor.ImageRepository.GetById(id)
+func (interactor *ImageInteractor) ListImages(limit int, offset int) (i entity.Images, totalPages int, err error) {
+	i, err = interactor.ImageRepository.Get(limit, offset)
+	totalPages, err = interactor.ImageRepository.Count()
 	if err != nil {
 		interactor.StatusCode = 404
 		return
@@ -25,12 +20,27 @@ func (interactor *ImageInteractor) GetByID(id int) (v entity.Image, err error) {
 	return
 }
 
-func (interactor *ImageInteractor) Add(v *entity.Image) (image entity.Image, err error) {
-	err = interactor.ImageRepository.Insert(v)
+func (interactor *ImageInteractor) GetByID(id int) (i entity.Image, err error) {
+	i, err = interactor.ImageRepository.GetById(id)
 	if err != nil {
+		interactor.StatusCode = 404
 		return
 	}
-	image, err = interactor.ImageRepository.GetById(v.Id)
+	interactor.StatusCode = 200
+	return
+}
+
+func (interactor *ImageInteractor) Add(image *entity.Image) (i entity.Image, err error) {
+	err = interactor.ImageRepository.Insert(image)
+	if err != nil {
+		interactor.StatusCode = 500
+		return
+	}
+	i, err = interactor.ImageRepository.GetById(image.Id)
+	if err != nil {
+		interactor.StatusCode = 500
+		return
+	}
 	interactor.StatusCode = 201
 	return
 }
