@@ -25,7 +25,7 @@ func (repo *ImageRepository) Get(limit int, offset int) (images entity.Images, e
 }
 
 func (repo *ImageRepository) GetById(id int) (image entity.Image, err error) {
-	err = repo.SelectOne(&image, "select * from images where id=? and is_private=false", id)
+	err = repo.SelectOne(&image, "select * from images where id=?", id)
 	if err != nil {
 		// Logging
 		return
