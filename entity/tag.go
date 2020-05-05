@@ -2,7 +2,7 @@ package entity
 
 import "time"
 
-type Tags []*Tag
+type Tags []Tag
 
 type Tag struct {
 	Id        int       `json:"id" db:"id" `

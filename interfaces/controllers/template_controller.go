@@ -66,38 +66,40 @@ func (controller *TemplateController) Index(c Context) {
 
 func (controller *TemplateController) Show(c Context) {
 	uid := c.Param("uid")
-	template, _, err := controller.Interactor.GetByUniqueId(uid)
+	template, tags, err := controller.Interactor.GetByUniqueId(uid)
 	if err != nil {
 		c.JSON(controller.Interactor.StatusCode, NewError(err))
 		return
 	}
 
-	c.JSON(controller.Interactor.StatusCode, template)
+	c.JSON(controller.Interactor.StatusCode, responseBuilder(template, tags))
 }
 
 func (controller *TemplateController) Create(c Context) {
 	t := &templateRequest{}
 	_ = c.Bind(&t)
 
-	template, tags := requestConverter(t)
+	tp, tg := requestConverter(t)
 
-	tp, tg, err := controller.Interactor.Add(template, tags)
+	template, tags, err := controller.Interactor.Add(tp, tg)
 	if err != nil {
 		c.JSON(controller.Interactor.StatusCode, NewError(err))
 		return
 	}
-	c.JSON(controller.Interactor.StatusCode, responseBuilder(tp, tg))
+
+	c.JSON(controller.Interactor.StatusCode, responseBuilder(template, tags))
 }
 
-func requestConverter(t *templateRequest) (template *entity.Template, tags []entity.Tag) {
-	template = &entity.Template{
-		BackGroundUrl: t.BackGroundUrl,
+func requestConverter(t *templateRequest) (tp *entity.Template, tg []entity.Tag) {
+	tp = &entity.Template{
+		BackGroundUrl:      t.BackGroundUrl,
 		GeneratedSampleUrl: t.GeneratedSampleUrl,
 	}
 
-	for _, tgg := range t.Tags {
-		tags = append(tags, entity.Tag{Title:tgg})
+	for _, title := range t.Tags {
+		tg = append(tg, entity.Tag{Title: title})
 	}
+
 	return
 }
 
@@ -111,5 +113,6 @@ func responseBuilder(tp entity.Template, tg []entity.Tag) (t templateResponse) {
 	for _, tag := range tg {
 		t.Tags = append(t.Tags, tag.Title)
 	}
+
 	return
 }
