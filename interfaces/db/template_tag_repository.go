@@ -20,7 +20,6 @@ func (repo *TemplateTagRepository) GetByTemplateId(t int) (templateTags entity.T
 
 func (repo *TemplateTagRepository) GetByTagId(t int) (templateTag entity.TemplateTag, err error) {
 	err = repo.SelectOne(&templateTag, "select * from template_tags where tag_id=?", t)
-	fmt.Println(templateTag)
 	if err != nil {
 		return
 	}
