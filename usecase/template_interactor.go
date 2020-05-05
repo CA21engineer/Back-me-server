@@ -57,19 +57,29 @@ func (interactor *TemplateInteractor) Add(tp *entity.Template, tg []entity.Tag) 
 		return
 	}
 	// TagをInsertしつつ、TemplateTagsにもInsert
-	// err握り潰しちゃいます。
+	// err握り潰しちゃいます...
 	for _, t := range tg {
-		// Titleが重複するものもInsertしてしまいます
-		requestTag := &entity.Tag{
-			Title: t.Title,
+		var existTag entity.Tag
+		existTag, _ = interactor.TagRepository.GetByTitle(t.Title)
+		// 既にTitleが一致するものがあれば、TagへのInsertを行わない
+		if existTag.Title != "" {
+			tt := &entity.TemplateTag{
+				TagId:      existTag.Id,
+				TemplateId: tp.Id,
+			}
+			_ = interactor.TemplateTagRepository.Insert(tt)
+		} else {
+			requestTag := &entity.Tag{
+				Title: t.Title,
+			}
+			_ = interactor.TagRepository.Insert(requestTag)
+
+			tt := &entity.TemplateTag{
+				TagId:      requestTag.Id,
+				TemplateId: tp.Id,
+			}
+			_ = interactor.TemplateTagRepository.Insert(tt)
 		}
-		_ = interactor.TagRepository.IgnoreInsert(requestTag)
-		// TemplateTags
-		tt := &entity.TemplateTag{
-			TagId:      requestTag.Id,
-			TemplateId: tp.Id,
-		}
-		_ = interactor.TemplateTagRepository.Insert(tt)
 	}
 
 	// 追加されたレコードを取得
