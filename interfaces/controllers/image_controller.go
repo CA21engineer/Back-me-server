@@ -66,3 +66,13 @@ func (controller *ImageController) Create(c Context) {
 	}
 	c.JSON(controller.Interactor.StatusCode, image)
 }
+
+func (controller *ImageController) GetSignedUrl(c Context) {
+	rowImgName := c.DefaultQuery("image", "default.jpeg")
+	url, fileKey, err := controller.Interactor.GetSignedUrl(rowImgName)
+	if err != nil {
+		c.JSON(controller.Interactor.StatusCode, NewError(err))
+		return
+	}
+	c.JSON(controller.Interactor.StatusCode, H{"signed_url": url, "file_key": fileKey})
+}
