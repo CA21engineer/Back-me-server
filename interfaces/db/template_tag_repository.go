@@ -2,7 +2,6 @@ package db
 
 import (
 	"ca-zoooom/entity"
-	"fmt"
 	"log"
 )
 
