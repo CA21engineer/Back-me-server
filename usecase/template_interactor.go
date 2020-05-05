@@ -15,8 +15,8 @@ type TemplateResponse struct {
 	Tags entity.Tags
 }
 
-func (interactor *TemplateInteractor) ListTemplates(limit int, offset int) (t entity.Templates, totalPages int, err error) {
-	t, err = interactor.TemplateRepository.Get(limit, offset)
+func (interactor *TemplateInteractor) ListTemplates(limit int, offset int, keyword string) (t entity.Templates, totalPages int, err error) {
+	t, err = interactor.TemplateRepository.Get(limit, offset, keyword)
 	totalPages, err = interactor.TemplateRepository.Count()
 	if err != nil {
 		interactor.StatusCode = 404

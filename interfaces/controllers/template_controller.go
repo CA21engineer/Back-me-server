@@ -26,9 +26,10 @@ func (controller *TemplateController) Index(c Context) {
 	// ページネーション処理
 	pageNumber, _ := strconv.Atoi(c.DefaultQuery("pages", "1"))
 	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	keyword := c.DefaultQuery("keyword", "")
 	offset := limit * (pageNumber - 1)
 
-	templates, total, err := controller.Interactor.ListTemplates(limit, offset)
+	templates, total, err := controller.Interactor.ListTemplates(limit, offset, keyword)
 	if err != nil {
 		c.JSON(controller.Interactor.StatusCode, NewError(err))
 		return
