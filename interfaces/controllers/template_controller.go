@@ -6,16 +6,39 @@ import (
 	"ca-zoooom/usecase"
 	"math"
 	"strconv"
+	"time"
 )
 
 type TemplateController struct {
 	Interactor usecase.TemplateInteractor
 }
 
+type templateRequest struct {
+	BackGroundUrl      string   `json:"background_url"`
+	GeneratedSampleUrl string   `json:"generated_sample_url"`
+	Tags               []string `json:"tags"`
+}
+
+type templateResponse struct {
+	Id                 int       `json:"id"`
+	Uid                string    `json:"uid"`
+	BackGroundUrl      string    `json:"background_url"`
+	GeneratedSampleUrl string    `json:"generated_sample_url"`
+	Tags               []string  `json:"tags"`
+	UpdatedAt          time.Time `json:"updated_at"`
+	CreatedAt          time.Time `json:"created_at"`
+}
+
 func NewTemplateController(sqlHandler db.SqlHandler) *TemplateController {
 	return &TemplateController{
 		Interactor: usecase.TemplateInteractor{
 			TemplateRepository: &db.TemplateRepository{
+				SqlHandler: sqlHandler,
+			},
+			TagRepository: &db.TagRepository{
+				SqlHandler: sqlHandler,
+			},
+			TemplateTagRepository: &db.TemplateTagRepository{
 				SqlHandler: sqlHandler,
 			},
 		},
@@ -43,22 +66,53 @@ func (controller *TemplateController) Index(c Context) {
 
 func (controller *TemplateController) Show(c Context) {
 	uid := c.Param("uid")
-	template, _, err := controller.Interactor.GetByUniqueId(uid)
+	template, tags, err := controller.Interactor.GetByUniqueId(uid)
 	if err != nil {
 		c.JSON(controller.Interactor.StatusCode, NewError(err))
 		return
 	}
 
-	c.JSON(controller.Interactor.StatusCode, template)
+	c.JSON(controller.Interactor.StatusCode, responseBuilder(template, tags))
 }
 
 func (controller *TemplateController) Create(c Context) {
-	v := &entity.Template{}
-	_ = c.Bind(&v)
-	template, err := controller.Interactor.Add(v)
+	t := &templateRequest{}
+	_ = c.Bind(&t)
+
+	tp, tg := requestConverter(t)
+
+	template, tags, err := controller.Interactor.Add(tp, tg)
 	if err != nil {
 		c.JSON(controller.Interactor.StatusCode, NewError(err))
 		return
 	}
-	c.JSON(controller.Interactor.StatusCode, template)
+
+	c.JSON(controller.Interactor.StatusCode, responseBuilder(template, tags))
+}
+
+func requestConverter(t *templateRequest) (tp *entity.Template, tg []entity.Tag) {
+	tp = &entity.Template{
+		BackGroundUrl:      t.BackGroundUrl,
+		GeneratedSampleUrl: t.GeneratedSampleUrl,
+	}
+
+	for _, title := range t.Tags {
+		tg = append(tg, entity.Tag{Title: title})
+	}
+
+	return
+}
+
+func responseBuilder(tp entity.Template, tg []entity.Tag) (t templateResponse) {
+	t.Id = tp.Id
+	t.Uid = tp.Uid
+	t.GeneratedSampleUrl = tp.GeneratedSampleUrl
+	t.BackGroundUrl = tp.BackGroundUrl
+	t.UpdatedAt = tp.UpdatedAt
+	t.CreatedAt = tp.CreatedAt
+	for _, tag := range tg {
+		t.Tags = append(t.Tags, tag.Title)
+	}
+
+	return
 }
