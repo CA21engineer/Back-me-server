@@ -14,6 +14,8 @@ type TemplateController struct {
 }
 
 type templateRequest struct {
+	DesignPatternId    int      `json:"design_pattern_id"`
+	IsPrivate          bool     `json:"is_private"`
 	BackGroundUrl      string   `json:"background_url"`
 	GeneratedSampleUrl string   `json:"generated_sample_url"`
 	Tags               []string `json:"tags"`
@@ -22,6 +24,8 @@ type templateRequest struct {
 type templateResponse struct {
 	Id                 int       `json:"id"`
 	Uid                string    `json:"uid"`
+	DesignPatternId    int       `json:"design_pattern_id"`
+	IsPrivate          bool      `json:"is_private"`
 	BackGroundUrl      string    `json:"background_url"`
 	GeneratedSampleUrl string    `json:"generated_sample_url"`
 	Tags               []string  `json:"tags"`
@@ -92,6 +96,8 @@ func (controller *TemplateController) Create(c Context) {
 
 func requestConverter(t *templateRequest) (tp *entity.Template, tg []entity.Tag) {
 	tp = &entity.Template{
+		DesignPatternId:    t.DesignPatternId,
+		IsPrivate:          t.IsPrivate,
 		BackGroundUrl:      t.BackGroundUrl,
 		GeneratedSampleUrl: t.GeneratedSampleUrl,
 	}
@@ -106,6 +112,8 @@ func requestConverter(t *templateRequest) (tp *entity.Template, tg []entity.Tag)
 func responseBuilder(tp entity.Template, tg []entity.Tag) (t templateResponse) {
 	t.Id = tp.Id
 	t.Uid = tp.Uid
+	t.DesignPatternId = tp.DesignPatternId
+	t.IsPrivate = tp.IsPrivate
 	t.GeneratedSampleUrl = tp.GeneratedSampleUrl
 	t.BackGroundUrl = tp.BackGroundUrl
 	t.UpdatedAt = tp.UpdatedAt
