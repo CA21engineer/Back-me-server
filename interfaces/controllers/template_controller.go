@@ -16,7 +16,6 @@ type TemplateController struct {
 type templateRequest struct {
 	DesignPatternId    int      `json:"design_pattern_id"`
 	IsPrivate          bool     `json:"is_private"`
-	Uid                string   `json:"uid"`
 	BackGroundUrl      string   `json:"background_url"`
 	GeneratedSampleUrl string   `json:"generated_sample_url"`
 	Tags               []string `json:"tags"`
