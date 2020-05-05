@@ -3,12 +3,19 @@ package infrastructure
 import (
 	"ca-zoooom/interfaces/controllers"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 )
 
 var Router *gin.Engine
 
 func init() {
 	r := gin.Default()
+
+	// CORS 対応
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+	r.Use(cors.New(config))
+
 
 	// Image
 	imageController := controllers.NewImageController(NewSqlHandler())
