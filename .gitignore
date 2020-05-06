@@ -84,3 +84,6 @@ Temporary Items
 
 # Binary
 main
+
+# Env
+.env

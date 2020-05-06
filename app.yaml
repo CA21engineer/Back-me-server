@@ -1,0 +1,5 @@
+runtime: go113
+instance_class: F1
+env_variables:
+  PORT: 8080
+  GIN_MODE: 'release'
