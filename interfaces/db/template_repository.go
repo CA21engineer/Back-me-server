@@ -19,10 +19,11 @@ func (repo *TemplateRepository) Count() (count int, err error) {
 
 func (repo *TemplateRepository) Get(limit int, offset int, keyword string) (templates entity.Templates, err error) {
 	keywordLike := "%" + keyword + "%"
-	_, err = repo.Select(&templates, "select templates.id, templates.uid, templates.background_url, templates.generated_sample_url, templates.created_at, templates.updated_at from templates "+
+	_, err = repo.Select(&templates, "select templates.id, templates.uid, templates.design_pattern_id, templates.is_private, templates.background_url, templates.generated_sample_url, templates.created_at, templates.updated_at from templates "+
 		"LEFT JOIN template_tags ON templates.id = template_tags.template_id "+
 		"LEFT JOIN tags ON template_tags.tag_id = tags.id "+
-		"where tags.title like ? "+
+		"where templates.is_private = 0 and "+
+		"tags.title like ? "+
 		"order by id desc "+
 		"limit ? offset ?",
 		keywordLike, limit, offset)
