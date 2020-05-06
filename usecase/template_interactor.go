@@ -14,7 +14,7 @@ type TemplateInteractor struct {
 
 func (interactor *TemplateInteractor) ListTemplates(limit int, offset int, keyword string) (t entity.Templates, totalPages int, err error) {
 	t, err = interactor.TemplateRepository.Get(limit, offset, keyword)
-	totalPages, err = interactor.TemplateRepository.Count()
+	totalPages, err = interactor.TemplateRepository.Count(keyword)
 	if err != nil {
 		interactor.StatusCode = 404
 		return
