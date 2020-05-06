@@ -11,8 +11,14 @@ type TemplateRepository struct {
 	SqlHandler
 }
 
-func (repo *TemplateRepository) Count() (count int, err error) {
-	c, err := repo.SelectInt("select count(*) from templates")
+func (repo *TemplateRepository) Count(keyword string) (count int, err error) {
+	keywordLike := "%" + keyword + "%"
+	c, err := repo.SelectInt("select count(*) from templates " +
+		"LEFT JOIN template_tags ON templates.id = template_tags.template_id "+
+		"LEFT JOIN tags ON template_tags.tag_id = tags.id "+
+		"where templates.is_private = 0 and "+
+		"tags.title like ? ",
+		keywordLike)
 	count = int(c)
 	return
 }
