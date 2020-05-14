@@ -59,7 +59,7 @@ func (repo *TemplateRepository) GetById(id int) (template entity.Template, err e
 }
 
 func (repo *TemplateRepository) Insert(template *entity.Template) (err error) {
-	template.Uid = util.GenerateUfid()
+	template.Uid = util.GenerateUlid()
 	template.UpdatedAt = time.Now()
 	template.CreatedAt = time.Now()
 	err = repo.SqlHandler.Insert(template)
